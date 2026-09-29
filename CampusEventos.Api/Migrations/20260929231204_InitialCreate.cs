@@ -17,11 +17,11 @@ namespace CampusEventos.Api.Migrations
                 name: "TB_CATEGORIAS",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "NUMBER(10)", nullable: false)
-                        .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    Nome = table.Column<string>(type: "NVARCHAR2(100)", maxLength: 100, nullable: false),
-                    Descricao = table.Column<string>(type: "NVARCHAR2(250)", maxLength: 250, nullable: true),
-                    Ativo = table.Column<bool>(type: "BOOLEAN", nullable: false, defaultValue: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nome = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Descricao = table.Column<string>(type: "TEXT", maxLength: 250, nullable: true),
+                    Ativo = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -32,15 +32,15 @@ namespace CampusEventos.Api.Migrations
                 name: "TB_EVENTOS",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "NUMBER(10)", nullable: false)
-                        .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    Titulo = table.Column<string>(type: "NVARCHAR2(150)", maxLength: 150, nullable: false),
-                    Descricao = table.Column<string>(type: "NVARCHAR2(500)", maxLength: 500, nullable: true),
-                    DataHora = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: false),
-                    Local = table.Column<string>(type: "NVARCHAR2(200)", maxLength: 200, nullable: false),
-                    CapacidadeMaxima = table.Column<int>(type: "NUMBER(10)", nullable: false),
-                    Preco = table.Column<decimal>(type: "NUMBER(10,2)", nullable: false),
-                    CategoriaId = table.Column<int>(type: "NUMBER(10)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Titulo = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    Descricao = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    DataHora = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Local = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    CapacidadeMaxima = table.Column<int>(type: "INTEGER", nullable: false),
+                    Preco = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: false),
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

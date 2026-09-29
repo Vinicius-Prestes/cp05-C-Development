@@ -27,7 +27,6 @@ public class Evento
     [Range(1, 10000)]
     public int CapacidadeMaxima { get; set; }
 
-    [Column(TypeName = "NUMBER(10,2)")]
     public decimal Preco { get; set; }
 
     // Chave estrangeira para Categoria

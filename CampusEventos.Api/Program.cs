@@ -5,11 +5,11 @@ using CampusEventos.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração do DbContext com Oracle
-var connectionString = builder.Configuration.GetConnectionString("OracleConnection");
+// Configuração do DbContext com SQLite
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseOracle(connectionString);
+    options.UseSqlite(connectionString);
 });
 
 // Adiciona suporte a Controllers
@@ -37,11 +37,18 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "CampusEventos API",
         Version = "v1",
-        Description = "API RESTful para gestão de eventos acadêmicos, desenvolvida em C# .NET 10 e Oracle com EF Core."
+        Description = "API RESTful para gestão de eventos acadêmicos, desenvolvida em C# .NET 10 e SQLite com EF Core."
     });
 });
 
 var app = builder.Build();
+
+// Aplica migrações e cria o banco SQLite automaticamente com dados iniciais (Seed)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
 
 // Configuração do pipeline de requisições HTTP
 if (app.Environment.IsDevelopment())

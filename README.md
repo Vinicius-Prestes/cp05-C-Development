@@ -2,7 +2,7 @@
 
 > **Disciplina:** C# Software Development  
 > **Tema:** Livre — Gestão de Eventos Acadêmicos e Workshops  
-> **Tecnologias:** C# .NET 10, ASP.NET Core Web API, Entity Framework Core, Oracle Database  
+> **Tecnologias:** C# .NET 10, ASP.NET Core Web API, Entity Framework Core, SQLite  
 
 ---
 
@@ -36,72 +36,58 @@ A organização de eventos acadêmicos frequentemente sofre com a falta de centr
 
 ## 🗄️ Banco de Dados
 
-- **SGBD:** Oracle Database
-- **ORM:** Entity Framework Core (`Oracle.EntityFrameworkCore` v10.23)
+- **SGBD Utilizado:** SQLite
+- **ORM:** Entity Framework Core (`Microsoft.EntityFrameworkCore.Sqlite` v10.0.12)
+- **Arquivo do Banco:** `campuseventos.db` (gerado localmente na raiz do projeto)
+- **Vantagens da escolha:**
+  - **Zero Configuração:** O avaliador não precisa instalar SGBDs externos, Docker ou configurar credenciais de rede/firewall.
+  - **Auto-provisionamento:** A API aplica automaticamente as Migrations na inicialização, gerando o arquivo `.db` e a carga inicial (*Seed Data*) de categorias e eventos.
 - **Tabelas Mapeadas:**
   - `TB_CATEGORIAS`: Armazena as categorias dos eventos (ex: Palestra, Workshop, Hackathon).
-  - `TB_EVENTOS`: Armazena os eventos, com relacionamento de chave estrangeira (`CategoriaId`) para `TB_CATEGORIAS`.
+  - `TB_EVENTOS`: Armazena os eventos, com chave estrangeira (`CategoriaId`) vinculada a `TB_CATEGORIAS`.
 
 ---
 
-## ⚙️ Configuração das Credenciais do Oracle
+## ⚙️ Configuração da Conexão
 
-Para garantir a segurança das credenciais e permitir que qualquer avaliador teste a aplicação utilizando seu próprio usuário do Oracle (por exemplo, a conta da FIAP), a connection string no arquivo `appsettings.json` está com campos para preenchimento.
-
-### Passo 1: Abrir o arquivo de configuração
-Abra o arquivo [`CampusEventos.Api/appsettings.json`](file:///c:/Users/labsfiap/Desktop/CP05%20-%20C/CampusEventos.Api/appsettings.json):
+A string de conexão está configurada no arquivo [`CampusEventos.Api/appsettings.json`](file:///c:/Users/labsfiap/Desktop/CP05%20-%20C/CampusEventos.Api/appsettings.json):
 
 ```json
 {
   "ConnectionStrings": {
-    "OracleConnection": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORCL)));User Id=INSIRA_SEU_RM_AQUI;Password=INSIRA_SUA_SENHA_AQUI;"
+    "DefaultConnection": "Data Source=campuseventos.db"
   }
 }
 ```
 
-### Passo 2: Inserir seus dados
-Substitua:
-- `INSIRA_SEU_RM_AQUI` pelo seu usuário do Oracle (ex: `RM12345`).
-- `INSIRA_SUA_SENHA_AQUI` pela sua senha do Oracle.
-
-> **Nota:** Caso utilize outro servidor Oracle local ou em nuvem, você pode alterar o `HOST`, `PORT` e `SERVICE_NAME` conforme sua necessidade.
+Nenhuma alteração é necessária para rodar o projeto localmente.
 
 ---
 
 ## 🚀 Como Executar o Projeto Localmente
 
 ### Pré-requisitos
-- [.NET SDK 10](https://dotnet.microsoft.com/download) instalado.
-- Ferramenta global do EF Core (caso queira rodar comandos `dotnet ef`):
-  ```bash
-  dotnet tool install --global dotnet-ef
-  ```
+- [.NET SDK 10](https://dotnet.microsoft.com/download) instalado no computador.
 
 ### Passo a Passo
 
-1. **Restaurar dependências:**
+1. **Restaurar as dependências:**
    ```bash
    dotnet restore
    ```
 
-2. **Aplicar as Migrations no Banco Oracle:**
-   Após configurar suas credenciais no `appsettings.json`, execute:
-   ```bash
-   dotnet ef database update --project CampusEventos.Api
-   ```
-   *(Esse comando criará automaticamente as tabelas `TB_CATEGORIAS` e `TB_EVENTOS` com os dados iniciais de seed no seu schema do Oracle)*.
-
-3. **Compilar a solução:**
+2. **Compilar a solução:**
    ```bash
    dotnet build
    ```
 
-4. **Executar a API:**
+3. **Executar a API:**
    ```bash
    dotnet run --project CampusEventos.Api
    ```
+   *(Na primeira execução, o banco SQLite `campuseventos.db` será criado automaticamente e populado com os dados iniciais de teste).*
 
-5. **Acessar a documentação interativa (Swagger UI):**
+4. **Acessar a documentação interativa (Swagger UI):**
    Abra o navegador no endereço:
    - 👉 **http://localhost:5161/swagger**
    - ou **https://localhost:7188/swagger**
@@ -110,10 +96,10 @@ Substitua:
 
 ## 🔄 Versionamento da API
 
-A API adota versionamento explícito via URL utilizando o pacote `Asp.Versioning.Mvc`, seguindo o padrão `/api/v{version}/[controller]`.
+A API implementa versionamento oficial via pacote `Asp.Versioning.Mvc`, com padrão de rotas explícitas `/api/v{version}/[controller]`.
 
-- Versão atual: **v1**
-- Exemplos de rotas:
+- **Versão Atual:** `v1`
+- **Rotas:**
   - `/api/v1/categorias`
   - `/api/v1/eventos`
 
@@ -157,7 +143,7 @@ A API adota versionamento explícito via URL utilizando o pacote `Asp.Versioning
 ```json
 {
   "titulo": "Workshop de C# e Entity Framework",
-  "descricao": "Capacitação prática em APIs REST com .NET 10 e Oracle",
+  "descricao": "Capacitação prática em APIs REST com .NET 10 e SQLite",
   "dataHora": "2026-10-25T19:00:00",
   "local": "Laboratório 502 - Campus Paulista",
   "capacidadeMaxima": 45,
@@ -170,20 +156,26 @@ A API adota versionamento explícito via URL utilizando o pacote `Asp.Versioning
 
 ## 🗃️ Migrations Documentadas
 
-A migração inicial foi gerada utilizando o Entity Framework Core Tools e encontra-se na pasta `CampusEventos.Api/Migrations`:
+A migração foi gerada utilizando o Entity Framework Core CLI e está versionada na pasta [`CampusEventos.Api/Migrations`](file:///c:/Users/labsfiap/Desktop/CP05%20-%20C/CampusEventos.Api/Migrations):
 
-- `20260929214810_InitialCreate.cs`: Contém as instruções DDL para criação das tabelas `TB_CATEGORIAS` e `TB_EVENTOS`, chaves primárias, chave estrangeira com restrição de deleção e inserção de dados iniciais (*seed*).
+- `20260929231204_InitialCreate.cs`: Contém as instruções DDL para criação das tabelas `TB_CATEGORIAS` e `TB_EVENTOS`, chaves primárias, chave estrangeira com restrição de exclusão e inserção dos dados iniciais (*Seed*).
 
-Comando utilizado para criação:
+Comando utilizado para criação da migração:
 ```bash
 dotnet ef migrations add InitialCreate --project CampusEventos.Api
+```
+
+Comando para aplicar manualmente (opcional, pois a API já aplica na inicialização):
+```bash
+dotnet ef database update --project CampusEventos.Api
 ```
 
 ---
 
 ## 📸 Evidências de Testes
 
-As capturas de tela demonstrando o funcionamento de cada endpoint da API via Swagger / Postman estão disponíveis na pasta:
+As capturas de tela demonstrando o funcionamento de cada endpoint da API via Swagger / Postman devem ser salvas na pasta:
 - 📁 [`evidencias/`](./evidencias/)
 
-Consulte o arquivo [`evidencias/README.md`](./evidencias/README.md) para verificar o checklist completo dos testes realizados.
+Consulte o arquivo [`evidencias/README.md`](./evidencias/README.md) para verificar o checklist completo dos testes a serem registrados.
+Para facilitar os testes, o arquivo [`CampusEventos.Api/CampusEventos.Api.http`](file:///c:/Users/labsfiap/Desktop/CP05%20-%20C/CampusEventos.Api/CampusEventos.Api.http) contém todas as requisições prontas para execução.

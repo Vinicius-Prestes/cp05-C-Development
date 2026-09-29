@@ -42,7 +42,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.DataHora).IsRequired();
             entity.Property(e => e.Local).IsRequired().HasMaxLength(200);
             entity.Property(e => e.CapacidadeMaxima).IsRequired();
-            entity.Property(e => e.Preco).HasColumnType("NUMBER(10,2)");
+            entity.Property(e => e.Preco).HasPrecision(10, 2);
         });
 
         // Carga inicial de dados (Seed) para testes rápidos
