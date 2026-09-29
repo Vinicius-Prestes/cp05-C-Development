@@ -1,0 +1,102 @@
+@CampusEventos.Api_HostAddress = http://localhost:5161
+
+### ------------------------------------------------------------
+### CATEGORIAS
+### ------------------------------------------------------------
+
+### 1. Listar todas as categorias
+GET {{CampusEventos.Api_HostAddress}}/api/v1/categorias
+Accept: application/json
+
+###
+
+### 2. Obter categoria por ID
+GET {{CampusEventos.Api_HostAddress}}/api/v1/categorias/1
+Accept: application/json
+
+###
+
+### 3. Criar uma nova categoria
+POST {{CampusEventos.Api_HostAddress}}/api/v1/categorias
+Content-Type: application/json
+
+{
+  "nome": "Minicurso",
+  "descricao": "Cursos rápidos de nivelamento e aprofundamento técnico"
+}
+
+###
+
+### 4. Atualizar uma categoria existente
+PUT {{CampusEventos.Api_HostAddress}}/api/v1/categorias/1
+Content-Type: application/json
+
+{
+  "nome": "Workshop Avançado",
+  "descricao": "Oficinas práticas avançadas de desenvolvimento",
+  "ativo": true
+}
+
+###
+
+### 5. Excluir categoria (sem eventos vinculados)
+DELETE {{CampusEventos.Api_HostAddress}}/api/v1/categorias/3
+Accept: application/json
+
+### ------------------------------------------------------------
+### EVENTOS
+### ------------------------------------------------------------
+
+### 6. Listar todos os eventos
+GET {{CampusEventos.Api_HostAddress}}/api/v1/eventos
+Accept: application/json
+
+###
+
+### 7. Filtrar eventos por termo ou categoria
+GET {{CampusEventos.Api_HostAddress}}/api/v1/eventos?termo=dotnet&categoriaId=1
+Accept: application/json
+
+###
+
+### 8. Obter evento por ID
+GET {{CampusEventos.Api_HostAddress}}/api/v1/eventos/1
+Accept: application/json
+
+###
+
+### 9. Criar um novo evento
+POST {{CampusEventos.Api_HostAddress}}/api/v1/eventos
+Content-Type: application/json
+
+{
+  "titulo": "Bootcamp de Arquitetura em Nuvem",
+  "descricao": "Treinamento intensivo de microsserviços e containers",
+  "dataHora": "2026-11-10T19:30:00",
+  "local": "Auditório FIAP - Campus Vila Olímpia",
+  "capacidadeMaxima": 80,
+  "preco": 49.90,
+  "categoriaId": 1
+}
+
+###
+
+### 10. Atualizar um evento existente
+PUT {{CampusEventos.Api_HostAddress}}/api/v1/eventos/1
+Content-Type: application/json
+
+{
+  "titulo": "Imersão em C# 13 e .NET 10 (Edição Especial)",
+  "descricao": "Workshop atualizado com foco em alta performance e Oracle EF Core",
+  "dataHora": "2026-10-18T19:00:00",
+  "local": "Laboratório 504 - Campus Paulista",
+  "capacidadeMaxima": 50,
+  "preco": 0.00,
+  "categoriaId": 1
+}
+
+###
+
+### 11. Excluir um evento
+DELETE {{CampusEventos.Api_HostAddress}}/api/v1/eventos/2
+Accept: application/json
