@@ -173,8 +173,79 @@ dotnet ef database update --project CampusEventos.Api
 
 ## 📸 Evidências de Testes
 
-As capturas de tela demonstrando o funcionamento de cada endpoint da API via Swagger / Postman devem ser salvas na pasta:
-- 📁 [`evidencias/`](./evidencias/)
+Abaixo estão registradas as evidências de teste realizadas no **Swagger UI**, comprovando o funcionamento e os status codes de cada endpoint da API.
 
-Consulte o arquivo [`evidencias/README.md`](./evidencias/README.md) para verificar o checklist completo dos testes a serem registrados.
-Para facilitar os testes, o arquivo [`CampusEventos.Api/CampusEventos.Api.http`](file:///c:/Users/labsfiap/Desktop/CP05%20-%20C/CampusEventos.Api/CampusEventos.Api.http) contém todas as requisições prontas para execução.
+---
+
+### 📂 Endpoints de Categorias (`/api/v1/categorias`)
+
+#### 1. `GET /api/v1/categorias` — Listar todas as categorias
+> Retorna status code `200 OK` com a listagem de categorias e a contagem de eventos vinculados.
+
+![GET Categorias](evidencias/categoria-get.png)
+
+---
+
+#### 2. `GET /api/v1/categorias/{id}` — Buscar categoria por ID
+> Retorna status code `200 OK` com os detalhes da categoria informada.
+
+![GET Categoria por ID](evidencias/categoria-getID.png)
+
+---
+
+#### 3. `POST /api/v1/categorias` — Cadastrar nova categoria
+> Retorna status code `201 Created` com o header `Location` apontando para o novo recurso criado.
+
+![POST Categoria](evidencias/categoria-post.png)
+
+---
+
+#### 4. `PUT /api/v1/categorias/{id}` — Atualizar categoria
+> Retorna status code `200 OK` com os dados da categoria devidamente atualizados.
+
+![PUT Categoria](evidencias/categoria-put.png)
+
+---
+
+#### 5. `DELETE /api/v1/categorias/{id}` — Excluir categoria
+> Retorna status code `204 No Content` confirmando a remoção da categoria sem eventos vinculados.
+
+![DELETE Categoria](evidencias/categoria-delete.png)
+
+---
+
+### 📅 Endpoints de Eventos (`/api/v1/eventos`)
+
+#### 1. `GET /api/v1/eventos` — Listar todos os eventos
+> Retorna status code `200 OK` com todos os eventos cadastrados e seus relacionamentos com categorias.
+
+![GET Eventos](evidencias/eventos-get.png)
+
+---
+
+#### 2. `GET /api/v1/eventos/{id}` — Buscar evento por ID
+> Retorna status code `200 OK` com os dados do evento pesquisado.
+
+![GET Evento por ID](evidencias/eventos-getID.png)
+
+---
+
+#### 3. `POST /api/v1/eventos` — Cadastrar novo evento
+> Retorna status code `201 Created` após validação de integridade referencial com a categoria.
+
+![POST Evento](evidencias/eventos-post.png)
+
+---
+
+#### 4. `PUT /api/v1/eventos/{id}` — Atualizar evento
+> Retorna status code `200 OK` com os dados do evento modificados.
+
+![PUT Evento](evidencias/eventos-put.png)
+
+---
+
+#### 5. `DELETE /api/v1/eventos/{id}` — Excluir evento
+> Retorna status code `204 No Content` confirmando a exclusão do evento.
+
+![DELETE Evento](evidencias/eventos-delete.png)
+
